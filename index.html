@@ -135,6 +135,20 @@ body{font-stretch:75%}
 select,input[type=text],input[type=url],input[type=tel],input[type=email],textarea,.chip,.fine,.thanks p,.field small,.count,.err{font-family:var(--f-round);font-stretch:normal}
 h1,.how h2,.thanks h2{letter-spacing:0}
 
+/* Goal bars */
+.goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.goal{background:var(--cream);color:var(--ink);border:4px solid var(--red);border-radius:28px;padding:16px 18px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center}
+.goal img{grid-row:1/3;height:62px;width:auto}
+.goal h3{margin:0;font-family:var(--f-caps);font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:clamp(.9rem,2vw,1.05rem);letter-spacing:.04em;color:var(--red);line-height:1.05}
+.goal .raised{margin:0;font-family:var(--f-round);font-size:1rem;font-variant-numeric:tabular-nums}
+.goal .raised b{font-family:var(--f-caps);font-stretch:125%;font-weight:900;font-size:1.35rem;color:var(--green-deep)}
+.track{grid-column:1/-1;height:24px;background:var(--white);border:3px solid var(--gold);border-radius:999px;overflow:hidden;margin-top:8px}
+.fill{height:100%;width:0;border-radius:999px;transition:width 1.4s cubic-bezier(.2,.8,.2,1);background:repeating-linear-gradient(-45deg,var(--red) 0 12px,#b82024 12px 24px)}
+.goal.community .fill{background:repeating-linear-gradient(-45deg,var(--green) 0 12px,var(--green-deep) 12px 24px)}
+.goal .meta{grid-column:1/-1;margin:2px 0 0;display:flex;justify-content:space-between;gap:8px;font-family:var(--f-round);font-size:.88rem;opacity:.85;font-variant-numeric:tabular-nums}
+@media (max-width:700px){.goals{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+
 @keyframes bob{0%,100%{transform:rotate(0)}50%{transform:rotate(-2.5deg)}}
 @media (prefers-reduced-motion:reduce){.hero-art img.santa{animation:none}.card,.btn{transition:none}}
 
@@ -177,6 +191,24 @@ h1,.how h2,.thanks h2{letter-spacing:0}
   </header>
 
   <p class="clock">You have <b>48 HOURS</b> to take a picture, make your donation and send Santa to his next destination.</p>
+
+  <section class="goals" aria-label="Fundraising progress">
+    <div class="goal business">
+      <img src="santa-small.png" alt="">
+      <h3>Businesses passing the Claus</h3>
+      <p class="raised"><b id="biz-raised">$0</b> raised</p>
+      <div class="track" role="progressbar" aria-label="Business donations toward goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="biz-track"><div class="fill" id="biz-fill"></div></div>
+      <p class="meta"><span id="biz-gifts">0 donations</span><span id="biz-goal">Goal $10,000</span></p>
+    </div>
+    <div class="goal community">
+      <img src="tree.png" alt="">
+      <h3>Community cheer</h3>
+      <p class="raised"><b id="pub-raised">$0</b> raised</p>
+      <div class="track" role="progressbar" aria-label="Community donations toward goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pub-track"><div class="fill" id="pub-fill"></div></div>
+      <p class="meta"><span id="pub-gifts">0 donors</span><span id="pub-goal">Goal $10,000</span></p>
+    </div>
+  </section>
+
 
   <form id="santa-form" novalidate>
     <section class="step" aria-labelledby="s1">
@@ -384,6 +416,7 @@ $("santa-form").addEventListener("submit", async ev => {
     $("send").disabled = false; updateButton();
     return showErr(`Preview mode: no Stripe link yet. This would charge $${amount} and send Santa from ${holder} to ${next}.`);
   }
+  try { localStorage.setItem("ss_return", "santa"); } catch (e) {}
   const url = new URL(STRIPE_LINK);
   url.searchParams.set("prefilled_amount", String(amount * 100));
   url.searchParams.set("client_reference_id", id);
@@ -405,17 +438,42 @@ $("optout-form").addEventListener("submit", async ev => {
 });
 
 // Thank-you view when Stripe sends people back to #thanks
-function checkThanks(){ $("thanks").hidden = location.hash !== "#thanks"; if (!$("thanks").hidden) $("thanks").scrollIntoView(); }
+function checkThanks(){
+  if (location.hash === "#thanks"){ let r = null; try { r = localStorage.getItem("ss_return"); localStorage.removeItem("ss_return"); } catch (e) {}
+    if (r === "donate"){ location.replace("donate.html#thanks"); return; } }
+  $("thanks").hidden = location.hash !== "#thanks"; if (!$("thanks").hidden) $("thanks").scrollIntoView(); }
 window.addEventListener("hashchange", checkThanks); checkThanks();
 updateButton(); updateCount();
 
 // When embedded on Squarespace, tell the parent page how tall we are (no double scrollbars)
-function postHeight(){ try { parent.postMessage({ ssHeight: document.documentElement.scrollHeight }, "*"); } catch (e) {} }
+function postHeight(){ try { parent.postMessage({ ssHeight: Math.ceil(document.body.getBoundingClientRect().height) }, "*"); } catch (e) {} }
 if (window.parent !== window){
   window.addEventListener("load", postHeight);
   window.addEventListener("resize", postHeight);
   if ("ResizeObserver" in window) new ResizeObserver(postHeight).observe(document.body);
 }
+
+// Goal bars: live totals from the tracker sheet
+(function(){
+  const money = n => "$" + Math.round(n).toLocaleString("en-US");
+  function paint(key, raised, goal, gifts, noun){
+    const pct = goal ? Math.min(100, raised / goal * 100) : 0;
+    document.getElementById(key + "-raised").textContent = money(raised);
+    document.getElementById(key + "-goal").textContent = "Goal " + money(goal);
+    document.getElementById(key + "-gifts").textContent = gifts + " " + noun + (gifts === 1 ? "" : "s");
+    document.getElementById(key + "-track").setAttribute("aria-valuenow", Math.round(pct));
+    requestAnimationFrame(() => { document.getElementById(key + "-fill").style.width = Math.max(pct, raised ? 3 : 0) + "%"; });
+  }
+  async function load(){
+    if (!APPS_SCRIPT_URL) return;
+    try {
+      const d = await fetch(APPS_SCRIPT_URL + "?totals=1").then(r => r.json());
+      paint("biz", d.business, d.goalBusiness, d.bizGifts, "donation");
+      paint("pub", d.public, d.goalPublic, d.pubGifts, "donor");
+    } catch (e) {}
+  }
+  load(); setInterval(load, 120000);
+})();
 </script>
 </body>
 </html>
