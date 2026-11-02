@@ -7,24 +7,29 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lobster&family=Montserrat:wght@700;800;900&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;1,300;1,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Leckerli+One&family=Nunito+Sans:ital,opsz,wdth,wght@0,6..12,75..125,200..1000;1,6..12,75..125,200..1000&family=Nunito:wght@400..900&display=swap">
 <style>
 /* Layout: the flyer, unfolded into a phone-first scroll. Green ground, cream cards, red callouts. Single theme on purpose: it matches the printed piece. */
 :root{
   --green:#10865a; --green-deep:#0c6e49; --red:#9e181b; --cream:#f7f0ca;
-  --gold:#c99c44; --ink:#434c43; --sun:#f6c026;
-  --f-script:"Lobster","Brush Script MT",cursive;
-  --f-caps:"Montserrat","Arial Black",system-ui,sans-serif;
-  --f-body:"Fira Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --gold:#c99c44; --ink:#434c43; --sun:#f6c026; --white:#fffdf3;
+  --f-script:"Leckerli One","Brush Script MT",cursive;
+  --f-caps:"Nunito Sans","Arial Black",system-ui,sans-serif;
+  --f-body:"Nunito Sans","Arial Narrow",system-ui,sans-serif;
+  --f-round:"Nunito",system-ui,sans-serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
 body{background:var(--green);color:var(--cream);font-family:var(--f-body);font-size:18px;line-height:1.35}
 .wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 40px;display:flex;flex-direction:column;gap:36px}
 
+/* Thank-you banner (shown when Stripe sends people back) */
+.thanks{background:var(--cream);color:var(--ink);border:4px solid var(--gold);border-radius:32px;padding:20px 24px;text-align:center;display:flex;flex-direction:column;gap:6px}
+.thanks h2{margin:0;font-family:var(--f-script);font-weight:400;color:var(--red);font-size:clamp(2rem,6vw,3rem);line-height:1}
+.thanks p{margin:0;font-size:1.1rem}
+
 /* Hero */
 .hero{display:grid;grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr);gap:20px;align-items:center}
-.hero-art{position:relative}
 .hero-art img.santa{width:100%;max-width:420px;display:block;animation:bob 4s ease-in-out infinite;transform-origin:50% 100%}
 .hero-text{text-align:center;display:flex;flex-direction:column;gap:6px;min-width:0}
 .title{position:relative;display:inline-block;margin:0 auto}
@@ -34,85 +39,126 @@ h1{margin:0;font-family:var(--f-script);font-weight:400;font-size:clamp(3rem,9vw
 .kicker{margin:0;font-family:var(--f-caps);font-weight:900;text-transform:uppercase;color:var(--gold);font-size:clamp(1.6rem,4.6vw,3rem);letter-spacing:.06em;line-height:1}
 .lede{margin:10px auto 0;max-width:24ch;font-weight:500;font-size:clamp(1.3rem,3vw,2rem);line-height:1.08;text-wrap:balance}
 
-/* 48 hour banner */
-.clock{background:var(--red);border:3px solid var(--gold);border-radius:999px;padding:22px clamp(20px,5vw,56px);text-align:center;font-style:italic;font-weight:300;font-size:clamp(1.15rem,2.6vw,1.6rem);line-height:1.2;text-wrap:balance}
+.clock{background:var(--red);border:3px solid var(--gold);border-radius:999px;padding:22px clamp(20px,5vw,56px);text-align:center;font-style:italic;font-weight:300;font-size:clamp(1.15rem,2.6vw,1.6rem);line-height:1.2;text-wrap:balance;margin:0}
 .clock b{font-weight:700}
 
-/* Levels */
-.levels{display:flex;flex-direction:column;gap:22px}
-.levels-head{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,28px)}
-.levels-head h2{margin:0;font-family:var(--f-caps);font-weight:800;text-transform:uppercase;text-align:center;font-size:clamp(1.25rem,3.6vw,2.2rem);line-height:1;letter-spacing:.04em;text-wrap:balance}
-.levels-head img{width:clamp(34px,6vw,56px);flex:none}
-.levels-head img:first-child{transform:rotate(15deg)}
-.levels-head img:last-child{transform:rotate(-17deg)}
+/* Form steps */
+form{display:flex;flex-direction:column;gap:30px;margin:0}
+.step{display:flex;flex-direction:column;gap:16px}
+.step-head{display:flex;align-items:center;gap:14px}
+.num{flex:none;width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--red);display:grid;place-items:center;font-family:var(--f-caps);font-weight:900;font-size:1.4rem}
+.step-head h2{margin:0;font-family:var(--f-caps);font-weight:800;text-transform:uppercase;font-size:clamp(1.1rem,3vw,1.7rem);line-height:1.05;letter-spacing:.03em;text-wrap:balance}
+.step-head img{width:44px;flex:none;transform:rotate(15deg)}
+
+/* Level cards as radio buttons */
 .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.card{display:grid;grid-template-rows:auto auto 1fr auto;justify-items:center;gap:6px;text-decoration:none;color:var(--ink);background:var(--cream);border:4px solid var(--red);border-radius:32px;padding:18px 12px 16px;text-align:center;transition:transform .18s ease,box-shadow .18s ease}
-.card:hover{transform:translateY(-4px) rotate(-1deg);box-shadow:0 10px 0 var(--green-deep)}
-.card:focus-visible{outline:4px solid var(--sun);outline-offset:4px}
+.card{position:relative;cursor:pointer;display:grid;grid-template-rows:auto auto 1fr auto;justify-items:center;gap:6px;color:var(--ink);background:var(--cream);border:4px solid var(--red);border-radius:32px;padding:18px 12px 16px;text-align:center;transition:transform .18s ease,box-shadow .18s ease}
+.card input{position:absolute;opacity:0;pointer-events:none}
+.card:hover{transform:translateY(-4px) rotate(-1deg)}
+.card:has(input:checked){box-shadow:0 0 0 5px var(--sun),0 10px 0 5px var(--green-deep);transform:translateY(-4px)}
+.card:has(input:focus-visible){outline:4px solid var(--sun);outline-offset:6px}
 .price{font-family:var(--f-caps);font-weight:900;color:var(--red);font-size:clamp(2rem,4.4vw,2.9rem);line-height:1;letter-spacing:-.01em}
 .name{font-weight:600;font-size:1.1rem;line-height:1.05;text-transform:uppercase;letter-spacing:-.01em;min-height:2.2em;display:flex;align-items:center}
-.card .art{height:130px;display:flex;align-items:center;justify-content:center}
-.card .art img{max-height:130px;width:auto;max-width:100%}
-.go{margin-top:6px;font-family:var(--f-caps);font-weight:800;font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--cream);background:var(--red);border-radius:999px;padding:10px 16px;white-space:nowrap}
-.card:hover .go{background:var(--green)}
+.card .art{height:120px;display:flex;align-items:center;justify-content:center}
+.card .art img{max-height:120px;width:auto;max-width:100%}
+.pick{margin-top:6px;font-family:var(--f-caps);font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--cream);background:var(--red);border-radius:999px;padding:9px 16px;white-space:nowrap}
+.pick::after{content:"Pick me"}
+.card:has(input:checked) .pick{background:var(--green)}
+.card:has(input:checked) .pick::after{content:"Picked \2713"}
 
-/* Custom amount band */
-.custom{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;background:var(--cream);color:var(--ink);border:4px solid var(--red);border-radius:32px;padding:16px 22px}
-.custom img{width:64px}
-.custom h3{margin:0;font-family:var(--f-caps);font-weight:900;color:var(--red);text-transform:uppercase;font-size:clamp(1.15rem,2.6vw,1.6rem);line-height:1}
+.custom{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;background:var(--cream);color:var(--ink);border:4px solid var(--red);border-radius:32px;padding:14px 22px;cursor:pointer}
+.custom:has(input[type=radio]:checked){box-shadow:0 0 0 5px var(--sun)}
+.custom input[type=radio]{position:absolute;opacity:0;pointer-events:none}
+.custom img{width:56px}
+.custom h3{margin:0;font-family:var(--f-caps);font-weight:900;color:var(--red);text-transform:uppercase;font-size:clamp(1.05rem,2.4vw,1.45rem);line-height:1}
 .custom p{margin:4px 0 0;font-size:1rem;line-height:1.2}
-.amt{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.amt label{display:flex;align-items:center;background:#fff;border:3px solid var(--red);border-radius:999px;padding:4px 14px;font-family:var(--f-caps);font-weight:900;font-size:1.5rem;color:var(--red)}
-.amt input{width:3.6ch;border:0;background:transparent;font:inherit;color:inherit;outline:none;-moz-appearance:textfield}
-.amt input::-webkit-outer-spin-button,.amt input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.amt label:focus-within{outline:4px solid var(--sun);outline-offset:2px}
-.amt a{text-decoration:none}
-.amt a:hover .go{background:var(--green)}
-.amt a:focus-visible{outline:4px solid var(--sun);outline-offset:4px;border-radius:999px}
-.hint{grid-column:1/-1;margin:0;font-size:.95rem;text-align:center;color:var(--ink)}
-.hint b{color:var(--red)}
+.money{display:flex;align-items:center;background:var(--white);border:3px solid var(--red);border-radius:999px;padding:4px 16px;font-family:var(--f-caps);font-weight:900;font-size:1.5rem;color:var(--red)}
+.money input{width:4ch;border:0;background:transparent;font:inherit;color:inherit;outline:none;-moz-appearance:textfield}
+.money input::-webkit-outer-spin-button,.money input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.money:focus-within{outline:4px solid var(--sun);outline-offset:2px}
+
+/* Fields */
+.panel{background:var(--cream);color:var(--ink);border-radius:28px;padding:20px clamp(16px,3vw,26px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-family:var(--f-caps);font-weight:800;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--red)}
+.field small{font-size:.92rem;color:var(--ink);opacity:.85}
+select,input[type=text],input[type=url],input[type=tel],textarea{width:100%;font:inherit;font-size:1.05rem;color:var(--ink);background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:12px 14px;min-width:0}
+textarea{min-height:96px;resize:vertical}
+select:focus,input:focus,textarea:focus{outline:3px solid var(--sun);outline-offset:1px;border-color:var(--red)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:.95rem;border:2px solid var(--green);background:transparent;color:var(--green-deep);border-radius:999px;padding:6px 12px;cursor:pointer}
+.chip:hover{background:var(--green);color:var(--cream)}
+.chip:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.count{align-self:flex-end;font-size:.85rem;opacity:.75;font-variant-numeric:tabular-nums}
+
+/* Send button */
+.send{display:flex;flex-direction:column;align-items:center;gap:10px}
+.btn{font-family:var(--f-caps);font-weight:900;font-size:clamp(1.1rem,3vw,1.5rem);text-transform:uppercase;letter-spacing:.06em;color:var(--cream);background:var(--red);border:4px solid var(--gold);border-radius:999px;padding:18px 40px;cursor:pointer;box-shadow:0 8px 0 var(--green-deep);transition:transform .12s ease,box-shadow .12s ease;max-width:100%}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px);box-shadow:0 4px 0 var(--green-deep)}
+.btn:focus-visible{outline:4px solid var(--sun);outline-offset:4px}
+.btn[disabled]{opacity:.7;cursor:wait}
+.fine{margin:0;font-size:.98rem;text-align:center;max-width:46ch}
+.err{margin:0;background:var(--cream);color:var(--red);border-radius:14px;padding:10px 16px;font-weight:600;text-align:center}
 
 /* How to + opt out */
-.how{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start}
+.how{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start}
 .how h2{margin:0 0 14px;font-family:var(--f-script);font-weight:400;color:var(--red);font-size:clamp(2.4rem,6vw,3.6rem);line-height:1;
   text-shadow:-1px -1px 0 var(--cream),1px -1px 0 var(--cream),-1px 1px 0 var(--cream),1px 1px 0 var(--cream)}
 .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;counter-reset:s}
 .steps li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px;align-items:center;font-family:var(--f-caps);font-weight:700;text-transform:uppercase;font-size:clamp(.92rem,1.9vw,1.1rem);line-height:1.1;letter-spacing:.02em}
 .steps li::before{counter-increment:s;content:counter(s);width:52px;height:52px;border-radius:50%;background:var(--gold);color:var(--red);display:grid;place-items:center;font-weight:900;font-size:1.5rem}
-.steps a{color:var(--cream)}
-.optout{background:var(--red);border-radius:36px;padding:22px 20px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.optout{background:var(--red);border-radius:36px;padding:22px 20px;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:stretch}
 .optout h3{margin:0;font-family:var(--f-caps);font-weight:800;text-transform:uppercase;font-size:1.25rem;line-height:1;letter-spacing:.03em}
 .optout p{margin:0;font-family:var(--f-caps);font-weight:700;font-size:.85rem;line-height:1.15}
-.optout a{margin-top:4px;text-decoration:none;font-family:var(--f-caps);font-weight:800;font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--red);background:var(--cream);border-radius:999px;padding:10px 18px}
-.optout a:hover{background:var(--sun)}
-.optout a:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.optout .field label{color:var(--cream);text-align:left}
+.optout select,.optout input{border-color:var(--cream)}
+.ghost{align-self:center;font-family:var(--f-caps);font-weight:800;font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--red);background:var(--cream);border:0;border-radius:999px;padding:11px 20px;cursor:pointer}
+.ghost:hover{background:var(--sun)}
+.ghost:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
 
-.foot{text-align:center;font-weight:500;font-size:1rem;opacity:.9}
+.foot{text-align:center;font-weight:500;font-size:1rem;opacity:.95;margin:0}
 .foot b{font-family:var(--f-caps);font-weight:800;letter-spacing:.03em}
 
+/* Britt's type system: Leckerli One script, Nunito Sans Expanded caps, condensed Nunito Sans body, Nunito for form text */
+body{font-stretch:75%}
+.kicker,.step-head h2,.price,.pick,.custom h3,.money,.field label,.btn,.steps li,.optout h3,.optout p,.ghost,.foot b,.num{font-family:var(--f-caps);font-stretch:125%}
+.name{font-stretch:75%;font-weight:700}
+.clock{font-weight:300}
+select,input[type=text],input[type=url],input[type=tel],textarea,.chip,.fine,.thanks p,.field small,.count,.err{font-family:var(--f-round);font-stretch:normal}
+h1,.how h2,.thanks h2{letter-spacing:0}
+
 @keyframes bob{0%,100%{transform:rotate(0)}50%{transform:rotate(-2.5deg)}}
-@media (prefers-reduced-motion:reduce){.hero-art img.santa{animation:none}.card{transition:none}}
+@media (prefers-reduced-motion:reduce){.hero-art img.santa{animation:none}.card,.btn{transition:none}}
 
 @media (max-width:820px){
   .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .custom{grid-template-columns:auto minmax(0,1fr)}
-  .amt{grid-column:1/-1;justify-content:center}
   .how{grid-template-columns:minmax(0,1fr)}
 }
-@media (max-width:560px){
+@media (max-width:600px){
   .hero{grid-template-columns:minmax(0,1fr)}
-  .hero-art img.santa{max-width:200px;margin:0 auto}
+  .hero-art img.santa{max-width:190px;margin:0 auto}
   .clock{border-radius:32px}
   .card{border-radius:26px;padding:14px 8px}
-  .card .art{height:96px}.card .art img{max-height:96px}
-  .name{font-size:.98rem}
-  .go{font-size:.72rem;padding:9px 12px}
+  .card .art{height:88px}.card .art img{max-height:88px}
+  .name{font-size:.95rem}
+  .pick{font-size:.68rem;padding:8px 12px}
+  .custom{grid-template-columns:auto minmax(0,1fr);padding:14px 16px}
+  .money{grid-column:1/-1;justify-self:center}
+  .panel{grid-template-columns:minmax(0,1fr)}
+  .btn{width:100%;padding:18px 20px}
 }
 </style>
 </head>
 <body style="margin:0">
 
 <main class="wrap">
+  <section class="thanks" id="thanks" hidden>
+    <h2>Ho ho ho, thank you!</h2>
+    <p>Santa is packing his sack. We'll get him to his next stop soon.</p>
+  </section>
+
   <header class="hero">
     <div class="hero-art"><img class="santa" src="img/santa.png" alt="Seneca Santa leaning on a present with his sack over his shoulder"></div>
     <div class="hero-text">
@@ -122,42 +168,75 @@ h1{margin:0;font-family:var(--f-script);font-weight:400;font-size:clamp(3rem,9vw
     </div>
   </header>
 
-  <p class="clock">You have <b>48 HOURS</b> to take a picture, make your donation and send Santa to his next Schuyler County destination.</p>
+  <p class="clock">You have <b>48 HOURS</b> to take a picture, make your donation and send Santa to his next destination.</p>
 
-  <section class="levels" aria-labelledby="levels-h">
-    <div class="levels-head"><img src="img/star.png" alt=""><h2 id="levels-h">Choose your level of Christmas cheer</h2><img src="img/star.png" alt=""></div>
-    <div class="cards">
-      <a class="card" data-level="claus" href="#" target="_top">
-        <span class="price">$25</span><span class="name">Pass the Claus</span>
-        <span class="art"><img src="img/santa-small.png" alt=""></span>
-        <span class="go">Send Santa</span>
-      </a>
-      <a class="card" data-level="stocking" href="#" target="_top">
-        <span class="price">$50</span><span class="name">Fill the Stocking</span>
-        <span class="art"><img src="img/stocking.png" alt=""></span>
-        <span class="go">Send Santa</span>
-      </a>
-      <a class="card" data-level="helper" href="#" target="_top">
-        <span class="price">$75</span><span class="name">Santa's Helper</span>
-        <span class="art"><img src="img/elf.png" alt=""></span>
-        <span class="go">Send Santa</span>
-      </a>
-      <a class="card" data-level="gift" href="#" target="_top">
-        <span class="price">$100</span><span class="name">Give the Gift of Christmas</span>
-        <span class="art"><img src="img/tree.png" alt=""></span>
-        <span class="go">Send Santa</span>
-      </a>
-    </div>
-    <div class="custom">
-      <img src="img/star.png" alt="">
-      <div><h3>Choose your own amount</h3><p>Any amount helps. Give what feels right.</p></div>
-      <div class="amt">
-        <label for="amount">$<input id="amount" type="number" inputmode="numeric" min="1" step="1" value="35" aria-label="Your donation amount in dollars"></label>
-        <a data-level="custom" href="#" target="_top"><span class="go">Send Santa</span></a>
+  <form id="santa-form" novalidate>
+    <section class="step" aria-labelledby="s1">
+      <div class="step-head"><span class="num">1</span><h2 id="s1">Choose your level of Christmas cheer</h2></div>
+      <div class="cards">
+        <label class="card"><input type="radio" name="level" value="25" checked>
+          <span class="price">$25</span><span class="name">Pass the Claus</span>
+          <span class="art"><img src="img/santa-small.png" alt=""></span><span class="pick"></span></label>
+        <label class="card"><input type="radio" name="level" value="50">
+          <span class="price">$50</span><span class="name">Fill the Stocking</span>
+          <span class="art"><img src="img/stocking.png" alt=""></span><span class="pick"></span></label>
+        <label class="card"><input type="radio" name="level" value="75">
+          <span class="price">$75</span><span class="name">Santa's Helper</span>
+          <span class="art"><img src="img/elf.png" alt=""></span><span class="pick"></span></label>
+        <label class="card"><input type="radio" name="level" value="100">
+          <span class="price">$100</span><span class="name">Give the Gift of Christmas</span>
+          <span class="art"><img src="img/tree.png" alt=""></span><span class="pick"></span></label>
       </div>
-      <p class="hint" id="hint">On the next screen, set <b>Quantity to 35</b> to give <b>$35</b>.</p>
+      <label class="custom"><input type="radio" name="level" value="custom" id="level-custom">
+        <img src="img/star.png" alt="">
+        <span><h3>Or choose your own amount</h3><p>Any amount helps. Give what feels right.</p></span>
+        <span class="money">$<input id="amount" type="number" inputmode="numeric" min="5" step="1" placeholder="35" aria-label="Your donation amount in dollars"></span>
+      </label>
+    </section>
+
+    <section class="step" aria-labelledby="s2">
+      <div class="step-head"><span class="num">2</span><h2 id="s2">Who has Santa, and where's he going next?</h2></div>
+      <div class="panel">
+        <div class="field">
+          <label for="holder">Your business</label>
+          <select id="holder" name="holder" required></select>
+          <input type="text" id="holder-other" name="holderOther" placeholder="Type your business name" hidden>
+        </div>
+        <div class="field">
+          <label for="next">Send Santa next to</label>
+          <select id="next" name="next" required></select>
+          <input type="text" id="next-other" name="nextOther" placeholder="Type the business name" hidden>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s3">
+      <div class="step-head"><span class="num">3</span><h2 id="s3">Leave them a little note</h2></div>
+      <div class="panel">
+        <div class="field full">
+          <label for="message">Your message</label>
+          <small>Santa brings this with him. Tap one for ideas, or write your own.</small>
+          <div class="chips" id="chips"></div>
+          <textarea id="message" name="message" maxlength="250" placeholder="We were good this year. Your turn."></textarea>
+          <span class="count" id="count">0 / 250</span>
+        </div>
+        <div class="field">
+          <label for="from">Sign it from</label>
+          <input type="text" id="from" name="from" placeholder="Your name, your business, or Secret Elf">
+        </div>
+        <div class="field">
+          <label for="post">Link to your Santa post <span style="text-transform:none;letter-spacing:0;font-weight:600">(optional)</span></label>
+          <input type="url" id="post" name="post" inputmode="url" placeholder="Paste your Facebook or Instagram link">
+        </div>
+      </div>
+    </section>
+
+    <div class="send">
+      <p class="err" id="err" role="alert" hidden></p>
+      <button class="btn" type="submit" id="send">Send Santa &middot; $25</button>
+      <p class="fine">Next you'll see a secure Stripe checkout with your amount filled in. Apple Pay, Google Pay or card.</p>
     </div>
-  </section>
+  </form>
 
   <section class="how" aria-labelledby="how-h">
     <div>
@@ -165,13 +244,23 @@ h1{margin:0;font-family:var(--f-script);font-weight:400;font-size:clamp(3rem,9vw
       <ol class="steps">
         <li>Take a video or picture with Santa</li>
         <li>Post it on social media tagging @southeastseneca and Seneca Santa</li>
-        <li>Pick a level above, then choose where Santa goes next</li>
+        <li>Fill out this page and tap Send Santa</li>
       </ol>
     </div>
     <aside class="optout">
       <h3>Not able to participate?</h3>
       <p>No worries, Santa will be picked up free of charge.</p>
-      <a data-level="optout" href="#" target="_top">Opt out here</a>
+      <button type="button" class="ghost" id="optout-open">Opt out here</button>
+      <form id="optout-form" hidden novalidate>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="field"><label for="oo-biz">Your business</label><select id="oo-biz" required></select>
+            <input type="text" id="oo-biz-other" placeholder="Type your business name" hidden></div>
+          <div class="field"><label for="oo-name">Your name</label><input type="text" id="oo-name" required></div>
+          <div class="field"><label for="oo-phone">Best number for pickup (optional)</label><input type="tel" id="oo-phone" inputmode="tel"></div>
+          <button type="submit" class="ghost" id="oo-send">Pick up Santa</button>
+          <p id="oo-msg" style="text-transform:none" hidden></p>
+        </div>
+      </form>
     </aside>
   </section>
 
@@ -179,25 +268,127 @@ h1{margin:0;font-family:var(--f-script);font-weight:400;font-size:clamp(3rem,9vw
 </main>
 
 <script>
-/* ===== EDIT THESE: paste each Squarespace product link here ===== */
-const LINKS = {
-  claus:    "#",  // $25 Pass the Claus product page
-  stocking: "#",  // $50 Fill the Stocking product page
-  helper:   "#",  // $75 Santa's Helper product page
-  gift:     "#",  // $100 Give the Gift of Christmas product page
-  custom:   "#",  // $1 "Choose Your Amount" product page (donor sets quantity)
-  optout:   "#"   // free opt-out form page
+/* =================== EDIT THESE TWO LINES =================== */
+const STRIPE_LINK    = "";  // your Stripe "customer chooses what to pay" link, e.g. https://buy.stripe.com/abc123
+const APPS_SCRIPT_URL = ""; // your Apps Script web app URL, ends in /exec
+/* ============================================================ */
+
+const BUSINESSES = {
+  "South East Seneca": ["1885 Fruit Packing House","Atwater Vineyards","Burdett House Bed & Breakfast","Chateau Lafayette Reneau","Damiani Wine Cellars","Diamond on Seneca","Either Oar Wine, Whiskey & Cheese Bar","Finger Lakes Distilling","Grist Iron Brewing","Hazlitt 1852 Vineyards","Hector Cork and Bottle","Hector Hideaway Vineyard Villas","here.","HRLMS Creations Apothecary of Magic","Idol Ridge Winery & Alder Creek Distillery","J.R. Dill Winery","Johnny's Kitchen","Leidenfrost Vineyards","Lucky Hare Brewing (Hector)","Osmote Wine","Overlook Coffee Company","Rasta Ranch Vineyards","Red Newt Cellars","Ria's Wines","Ryan William Vineyard","Sawmill Creek Estate / Hector Wine Company","Scale House Brewery","Silver Thread Vineyard & Winegarden","Solera Tap House","Stonecat Café","The Burdett Exchange Meat and Mercantile","The Elf in the Oak","Two Goats Brewing","Wagner Vineyards"],
+  "Watkins Glen & Montour Falls": ["29 NEAT / Seneca Cheese Co.","Althea's Finger Lakes Tavern (Montour Falls)","Art & Nancy's Sub & Pizza Shop","Big Gully Candy","Bleachers Sports Bar & Grill","Blue Pointe Grille (Harbor Hotel)","Blue Ribbon Diner (Montour Falls)","Central Sip","Chef's Diner (Montour Falls)","Country Haven Treasures","El Rancho Mexican Restaurant","FLX Studio and Makers Market (Montour Falls)","Franklin Street Gallery & Gift Shop","Green Elephants Thai Vegan","H.L. Stevens Furniture (Montour Falls)","Harborside Lanes","Holy Cow Meat Market & Deli","House of Hong","International Motor Racing Research Center","Ivy Lane Flowers","J.R. Dill Wine Bar (Watkins Glen)","Jerlando's Ristorante & Pizza (Watkins Glen)","Jerlando's (Montour Falls)","Kookalaroc's Bar & Grill","Landon's Pub & Pizza","Lucky Hare Bar & Grill (Watkins Glen)","Lucky Star","Maria's Tavern","MicroDiner","Nickel's Pit BBQ","North New York at Montour House (Montour Falls)","Schuyler County Historical Society (Montour Falls)","Scuteri's Cannoli Connection","Seneca Sunrise Coffee","Singing Dog Bakery","Thai Elephants","The Benjamin Hotel","The Blackberry Inn","The Hotel Laurel at Seneca","The Tasting Room by Atwater (Watkins Glen)","Tobey's Donut Shop","Upstate Brewing Company FLX","Wags to Riches Thrift Shop","Watkins Glen Area Chamber / Visitor Center","Watkins Glen Harbor Hotel","Watkins Glen Promotions","Watkins Glen Wine & Spirits"],
+  "Around Schuyler County": ["2 Cats Cakery (Odessa)","Barry Family Cellars (Burdett)","Bub's Spirits (Odessa)","Bucket Bar & Grill (Odessa)","Castel Grisch Winery & Restaurant","Catharine Valley Winery","Curly's Family Restaurant","Hector Handmade","Hungry Burd (Burdett)","Johnson's Country Tavern","Lakeside Resort & 3812 Bistro","Lakewood Vineyards","Lost & Found Inn (Tyrone)","Odessa Coffee Depot","Quintus Gallery","Standing Stone Vineyards","Sugar Mountain Bakery","The Boar's Nest 414","The H&E Bar (Burdett)","TJ Antiques","Toni's Diner"]
 };
-document.querySelectorAll("[data-level]").forEach(a => {
-  const url = LINKS[a.dataset.level];
-  if (url && url !== "#") a.href = url;
-});
-const amt = document.getElementById("amount"), hint = document.getElementById("hint");
-function showHint(){
-  const n = Math.max(1, Math.round(Number(amt.value) || 0));
-  hint.innerHTML = amt.value ? `On the next screen, set <b>Quantity to ${n}</b> to give <b>$${n}</b>.` : "Type your amount, then tap Send Santa.";
+const OTHER = "Other (type it in)";
+const LEVELS = {25:"Pass the Claus",50:"Fill the Stocking",75:"Santa's Helper",100:"Give the Gift of Christmas"};
+const IDEAS = ["We were good this year. Your turn.","Ho ho hope you have deep pockets!","Santa says you're on the nice list. Prove it.","He ate all our cookies. Good luck.","Pass the Claus, we dare you.","Don't let him near the wine, trust us."];
+
+const $ = id => document.getElementById(id);
+
+function fillSelect(sel, placeholder){
+  sel.innerHTML = "";
+  sel.append(new Option(placeholder, ""));
+  for (const [group, names] of Object.entries(BUSINESSES)){
+    const og = document.createElement("optgroup"); og.label = group;
+    names.forEach(n => og.append(new Option(n, n)));
+    sel.append(og);
+  }
+  sel.append(new Option(OTHER, OTHER));
 }
-amt.addEventListener("input", showHint);
+function wireOther(sel, other){
+  sel.addEventListener("change", () => { other.hidden = sel.value !== OTHER; if (!other.hidden) other.focus(); });
+}
+const pickName = (sel, other) => sel.value === OTHER ? other.value.trim() : sel.value;
+
+fillSelect($("holder"), "Pick your business");
+fillSelect($("next"), "Pick where Santa goes");
+fillSelect($("oo-biz"), "Pick your business");
+wireOther($("holder"), $("holder-other"));
+wireOther($("next"), $("next-other"));
+wireOther($("oo-biz"), $("oo-biz-other"));
+
+// Message ideas
+IDEAS.forEach(t => {
+  const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = t;
+  b.addEventListener("click", () => { $("message").value = t; updateCount(); });
+  $("chips").append(b);
+});
+function updateCount(){ $("count").textContent = $("message").value.length + " / 250"; }
+$("message").addEventListener("input", updateCount);
+
+// Amount + button label
+function currentAmount(){
+  const lv = document.querySelector('input[name="level"]:checked').value;
+  if (lv !== "custom") return Number(lv);
+  return Math.round(Number($("amount").value) || 0);
+}
+function updateButton(){
+  const a = currentAmount();
+  $("send").textContent = a ? `Send Santa · $${a}` : "Send Santa";
+}
+document.querySelectorAll('input[name="level"]').forEach(r => r.addEventListener("change", () => {
+  if (r.value === "custom" && r.checked) $("amount").focus();
+  updateButton();
+}));
+$("amount").addEventListener("focus", () => { $("level-custom").checked = true; updateButton(); });
+$("amount").addEventListener("input", updateButton);
+
+function makeId(){
+  const d = new Date(), p = n => String(n).padStart(2,"0");
+  return `SS-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${Math.random().toString(36).slice(2,7).toUpperCase()}`;
+}
+async function saveToSheet(data){
+  if (!APPS_SCRIPT_URL) return;
+  const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 4000);
+  try {
+    await fetch(APPS_SCRIPT_URL, { method:"POST", mode:"no-cors", keepalive:true, signal:ctrl.signal, body:new URLSearchParams(data) });
+  } catch (e) { /* the payment still matters most; carry on */ }
+  clearTimeout(t);
+}
+function go(url){ try { window.top.location.href = url; } catch (e) { window.location.href = url; } }
+function showErr(msg){ $("err").textContent = msg; $("err").hidden = !msg; }
+
+$("santa-form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const amount = currentAmount();
+  const holder = pickName($("holder"), $("holder-other"));
+  const next = pickName($("next"), $("next-other"));
+  if (!amount || amount < 5) return showErr("Pick a level, or type an amount of $5 or more.");
+  if (!holder) return showErr("Tell us which business has Santa right now.");
+  if (!next) return showErr("Pick where Santa goes next.");
+  if (holder === next) return showErr("Santa can't stay put! Pick a different business for his next stop.");
+  showErr("");
+  const id = makeId();
+  const data = { type:"donation", id, amount, level: LEVELS[amount] || "Custom", holder, next,
+    message: $("message").value.trim(), from: $("from").value.trim(), post: $("post").value.trim() };
+  $("send").disabled = true; $("send").textContent = "Packing Santa's sleigh…";
+  await saveToSheet(data);
+  if (!STRIPE_LINK){
+    $("send").disabled = false; updateButton();
+    return showErr(`Preview mode: no Stripe link yet. This would charge $${amount} and send Santa from ${holder} to ${next}.`);
+  }
+  const url = new URL(STRIPE_LINK);
+  url.searchParams.set("prefilled_amount", String(amount * 100));
+  url.searchParams.set("client_reference_id", id);
+  go(url.toString());
+});
+
+// Opt out
+$("optout-open").addEventListener("click", () => { $("optout-form").hidden = false; $("optout-open").hidden = true; $("oo-biz").focus(); });
+$("optout-form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const biz = pickName($("oo-biz"), $("oo-biz-other")), name = $("oo-name").value.trim();
+  const msg = $("oo-msg"); msg.hidden = false;
+  if (!biz || !name){ msg.textContent = "Please add your business and your name."; return; }
+  $("oo-send").disabled = true;
+  await saveToSheet({ type:"optout", id: makeId(), holder: biz, from: name, phone: $("oo-phone").value.trim() });
+  $("optout-form").querySelectorAll(".field,#oo-send").forEach(el => el.hidden = true);
+  msg.textContent = APPS_SCRIPT_URL ? "Got it! Santa will be picked up soon. Thanks for playing along!" : "Preview mode: this would let us know to pick up Santa.";
+});
+
+// Thank-you view when Stripe sends people back to #thanks
+function checkThanks(){ $("thanks").hidden = location.hash !== "#thanks"; if (!$("thanks").hidden) $("thanks").scrollIntoView(); }
+window.addEventListener("hashchange", checkThanks); checkThanks();
+updateButton(); updateCount();
 </script>
 </body>
 </html>
