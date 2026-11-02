@@ -236,13 +236,9 @@ h1,.how h2,.thanks h2{letter-spacing:0}
           <textarea id="message" name="message" maxlength="250" placeholder="We were good this year. Your turn."></textarea>
           <span class="count" id="count">0 / 250</span>
         </div>
-        <div class="field">
+        <div class="field full">
           <label for="from">Sign it from</label>
           <input type="text" id="from" name="from" placeholder="Your name, your business, or Secret Elf">
-        </div>
-        <div class="field">
-          <label for="post">Link to your Santa post <span style="text-transform:none;letter-spacing:0;font-weight:600">(optional)</span></label>
-          <input type="url" id="post" name="post" inputmode="url" placeholder="Paste your Facebook or Instagram link">
         </div>
       </div>
     </section>
@@ -380,7 +376,7 @@ $("santa-form").addEventListener("submit", async ev => {
   showErr("");
   const id = makeId();
   const data = { type:"donation", id, amount, level: LEVELS[amount] || "Custom", holder, next,
-    message: $("message").value.trim(), from: $("from").value.trim(), post: $("post").value.trim(),
+    message: $("message").value.trim(), from: $("from").value.trim(),
     email, phone: $("phone").value.trim() };
   $("send").disabled = true; $("send").textContent = "Packing Santa's sleigh…";
   await saveToSheet(data);
