@@ -193,7 +193,8 @@ h1,.how h2,.thanks h2{letter-spacing:0}
   </section>
 </main>
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKLCWHl2MmmGTY6Vkk8c4g0IWkeHbTmQUIFcuP2WXt4YKqOZqsmsqN4v2kzoqbXAmPDw/exec"; // same /exec URL as the other pages
+const BUSINESS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKLCWHl2MmmGTY6Vkk8c4g0IWkeHbTmQUIFcuP2WXt4YKqOZqsmsqN4v2kzoqbXAmPDw/exec";
+const COMMUNITY_SCRIPT_URL = ""; // Community Donations sheet /exec URL
 // Goal bars: live totals from the tracker sheet
 (function(){
   const money = n => "$" + Math.round(n).toLocaleString("en-US");
@@ -206,12 +207,15 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKLCWHl2MmmGTY
     requestAnimationFrame(() => { document.getElementById(key + "-fill").style.width = Math.max(pct, raised ? 3 : 0) + "%"; });
   }
   async function load(){
-    if (!APPS_SCRIPT_URL) return;
-    try {
-      const d = await fetch(APPS_SCRIPT_URL + "?totals=1").then(r => r.json());
-      paint("biz", d.business, d.goalBusiness, d.bizGifts, "donation");
-      paint("pub", d.public, d.goalPublic, d.pubGifts, "donor");
-    } catch (e) {}
+    if (typeof BUSINESS_SCRIPT_URL !== "undefined" && BUSINESS_SCRIPT_URL) {
+      try { const d = await fetch(BUSINESS_SCRIPT_URL + "?totals=1").then(r => r.json());
+        if (d.business !== undefined) paint("biz", d.business, d.goalBusiness, d.bizGifts, "donation");
+        if (d.public !== undefined) paint("pub", d.public, d.goalPublic, d.pubGifts, "donor"); } catch (e) {}
+    }
+    if (typeof COMMUNITY_SCRIPT_URL !== "undefined" && COMMUNITY_SCRIPT_URL) {
+      try { const d = await fetch(COMMUNITY_SCRIPT_URL + "?totals=1").then(r => r.json());
+        if (d.public !== undefined) paint("pub", d.public, d.goalPublic, d.pubGifts, "donor"); } catch (e) {}
+    }
   }
   load(); setInterval(load, 120000);
 })();
