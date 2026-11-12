@@ -317,7 +317,9 @@ h1,.how h2,.thanks h2{letter-spacing:0}
 <script>
 /* =================== EDIT THESE TWO LINES =================== */
 const STRIPE_LINK    = "https://buy.stripe.com/dRm5kw9MK2H06b08qI7kc00";  // your Stripe "customer chooses what to pay" link, e.g. https://buy.stripe.com/abc123
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKLCWHl2MmmGTY6Vkk8c4g0IWkeHbTmQUIFcuP2WXt4YKqOZqsmsqN4v2kzoqbXAmPDw/exec"; // your Apps Script web app URL, ends in /exec
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKLCWHl2MmmGTY6Vkk8c4g0IWkeHbTmQUIFcuP2WXt4YKqOZqsmsqN4v2kzoqbXAmPDw/exec"; // Pass the Claus sheet
+const BUSINESS_SCRIPT_URL = APPS_SCRIPT_URL;
+const COMMUNITY_SCRIPT_URL = ""; // Community Donations sheet /exec URL (for the green bar)
 /* ============================================================ */
 
 const BUSINESSES = {
@@ -385,11 +387,10 @@ function makeId(){
 }
 async function saveToSheet(data){
   if (!APPS_SCRIPT_URL) return;
-  const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 1500);
-  try {
-    await fetch(APPS_SCRIPT_URL, { method:"POST", mode:"no-cors", keepalive:true, signal:ctrl.signal, body:new URLSearchParams(data) });
-  } catch (e) { /* the payment still matters most; carry on */ }
-  clearTimeout(t);
+  const body = new URLSearchParams(data);
+  // sendBeacon finishes delivering even after the page moves on to Stripe
+  try { if (navigator.sendBeacon && navigator.sendBeacon(APPS_SCRIPT_URL, body)) return; } catch (e) {}
+  try { await fetch(APPS_SCRIPT_URL, { method:"POST", mode:"no-cors", keepalive:true, body }); } catch (e) {}
 }
 function go(url){ try { window.top.location.href = url; } catch (e) { window.location.href = url; } }
 function showErr(msg){ $("err").textContent = msg; $("err").hidden = !msg; }
@@ -465,12 +466,15 @@ if (window.parent !== window){
     requestAnimationFrame(() => { document.getElementById(key + "-fill").style.width = Math.max(pct, raised ? 3 : 0) + "%"; });
   }
   async function load(){
-    if (!APPS_SCRIPT_URL) return;
-    try {
-      const d = await fetch(APPS_SCRIPT_URL + "?totals=1").then(r => r.json());
-      paint("biz", d.business, d.goalBusiness, d.bizGifts, "donation");
-      paint("pub", d.public, d.goalPublic, d.pubGifts, "donor");
-    } catch (e) {}
+    if (typeof BUSINESS_SCRIPT_URL !== "undefined" && BUSINESS_SCRIPT_URL) {
+      try { const d = await fetch(BUSINESS_SCRIPT_URL + "?totals=1").then(r => r.json());
+        if (d.business !== undefined) paint("biz", d.business, d.goalBusiness, d.bizGifts, "donation");
+        if (d.public !== undefined) paint("pub", d.public, d.goalPublic, d.pubGifts, "donor"); } catch (e) {}
+    }
+    if (typeof COMMUNITY_SCRIPT_URL !== "undefined" && COMMUNITY_SCRIPT_URL) {
+      try { const d = await fetch(COMMUNITY_SCRIPT_URL + "?totals=1").then(r => r.json());
+        if (d.public !== undefined) paint("pub", d.public, d.goalPublic, d.pubGifts, "donor"); } catch (e) {}
+    }
   }
   load(); setInterval(load, 120000);
 })();
