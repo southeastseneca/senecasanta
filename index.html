@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Give to Seneca Santa</title>
+<title>Seneca Santa</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,12 +135,6 @@ body{font-stretch:75%}
 select,input[type=text],input[type=url],input[type=tel],input[type=email],textarea,.chip,.fine,.thanks p,.field small,.count,.err{font-family:var(--f-round);font-stretch:normal}
 h1,.how h2,.thanks h2{letter-spacing:0}
 
-.anon{flex-direction:row;align-items:flex-start;gap:12px;cursor:pointer;background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:12px 14px}
-.anon input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--red);flex:none}
-.anon span{display:flex;flex-direction:column;gap:2px;font-family:var(--f-round);font-stretch:normal;color:var(--ink)}
-.anon b{font-size:1.02rem}
-.anon:focus-within{outline:3px solid var(--sun);outline-offset:1px}
-
 /* Goal bars */
 .goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .goal{background:var(--cream);color:var(--ink);border:4px solid var(--red);border-radius:28px;padding:16px 18px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center}
@@ -183,20 +177,20 @@ h1,.how h2,.thanks h2{letter-spacing:0}
 <main class="wrap">
   <section class="thanks" id="thanks" hidden>
     <h2>Ho ho ho, thank you!</h2>
-    <p>Your gift helps make Christmas happen for local kids. Santa says you're officially on the nice list.</p>
-    <p><b>Spread the cheer!</b> Share Seneca Santa and tag @southeastseneca so your friends can give too.</p>
+    <p>Santa is packing his sack. We'll get him to his next stop soon.</p>
+    <p><b>Don't forget to share!</b> Post your Santa pic, tag @southeastseneca and Seneca Santa, and challenge your followers to donate too.</p>
   </section>
 
   <header class="hero">
     <div class="hero-art"><img class="santa" src="santa.png" alt="Seneca Santa leaning on a present with his sack over his shoulder"></div>
     <div class="hero-text">
       <div class="title"><img class="spark" src="star.png" alt=""><h1>Seneca Santa</h1></div>
-      <p class="kicker">Spread the Cheer</p>
-      <p class="lede">Help us provide Christmas for Schuyler County children this season!</p>
+      <p class="kicker">Pass the Claus</p>
+      <p class="lede">Santa has been sent to your business and he needs your help providing Christmas for local children!</p>
     </div>
   </header>
 
-  <p class="clock">Santa is making his way around South East Seneca and Schuyler County this holiday season. <b>You can help too.</b> Every dollar goes straight to Seneca Santa for kids right here in Schuyler County.</p>
+  <p class="clock">You have <b>48 HOURS</b> to take a picture, make your donation and send Santa to his next destination.</p>
 
   <section class="goals" aria-label="Fundraising progress">
     <div class="goal business">
@@ -216,7 +210,7 @@ h1,.how h2,.thanks h2{letter-spacing:0}
   </section>
 
 
-  <form id="give-form" novalidate>
+  <form id="santa-form" novalidate>
     <section class="step" aria-labelledby="s1">
       <div class="step-head"><span class="num">1</span><h2 id="s1">Choose your level of Christmas cheer</h2></div>
       <div class="cards">
@@ -241,54 +235,145 @@ h1,.how h2,.thanks h2{letter-spacing:0}
     </section>
 
     <section class="step" aria-labelledby="s2">
-      <div class="step-head"><span class="num">2</span><h2 id="s2">Tell us who you are</h2></div>
+      <div class="step-head"><span class="num">2</span><h2 id="s2">Who has Santa, and where's he going next?</h2></div>
       <div class="panel">
         <div class="field">
-          <label for="name">Your name</label>
-          <input type="text" id="name" name="name" autocomplete="name" placeholder="First and last name">
+          <label for="holder">Your business</label>
+          <select id="holder" name="holder" required></select>
+          <input type="text" id="holder-other" name="holderOther" placeholder="Type your business name" hidden>
+        </div>
+        <div class="field">
+          <label for="next">Send Santa next to</label>
+          <select id="next" name="next" required></select>
+          <input type="text" id="next-other" name="nextOther" placeholder="Type the business name" hidden>
         </div>
         <div class="field">
           <label for="email">Your email</label>
-          <input type="email" id="email" name="email" inputmode="email" autocomplete="email" placeholder="For your receipt" required>
+          <input type="email" id="email" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" required>
         </div>
-        <label class="anon field full" for="anon">
-          <input type="checkbox" id="anon" name="anon">
-          <span><b>Keep my gift anonymous</b><small>We won't share your name anywhere, including thank-you posts.</small></span>
-        </label>
+        <div class="field">
+          <label for="phone">Your phone <span style="text-transform:none;letter-spacing:0;font-weight:600">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="Just in case we need to reach you">
+        </div>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s3">
+      <div class="step-head"><span class="num">3</span><h2 id="s3">Leave them a little note</h2></div>
+      <div class="panel">
         <div class="field full">
-          <label for="note">A note for Santa <span style="text-transform:none;letter-spacing:0;font-weight:600">(optional)</span></label>
-          <textarea id="note" name="note" maxlength="250" placeholder="Merry Christmas from the Smith family!"></textarea>
+          <label for="message">Your message</label>
+          <small>Santa brings this with him. Tap one for ideas, or write your own.</small>
+          <div class="chips" id="chips"></div>
+          <textarea id="message" name="message" maxlength="250" placeholder="We were good this year. Your turn."></textarea>
+          <span class="count" id="count">0 / 250</span>
+        </div>
+        <div class="field full">
+          <label for="from">Sign it from</label>
+          <input type="text" id="from" name="from" placeholder="Your name, your business, or Secret Elf">
         </div>
       </div>
     </section>
 
     <div class="send">
       <p class="err" id="err" role="alert" hidden></p>
-      <button class="btn" type="submit" id="send">Donate &middot; $25</button>
-      <div class="share"><img src="star.png" alt=""><div><h3>Spread the cheer!</h3><p>After you give, share Seneca Santa and tag <b>@southeastseneca</b>. Challenge your friends and family to donate too. Every dollar helps local kids.</p></div></div>
+      <button class="btn" type="submit" id="send">Send Santa &middot; $25</button>
+      <div class="share"><img src="star.png" alt=""><div><h3>Don't forget to share!</h3><p>Post your Santa pic and tag <b>@southeastseneca</b> and <b>Seneca Santa</b>. Then challenge your friends and followers to donate too. Every dollar helps local kids.</p></div></div>
       <p class="fine">Next you'll see a secure Stripe checkout with your amount filled in. Apple Pay, Google Pay or card.</p>
     </div>
   </form>
 
-  <p class="foot"><b>100% of proceeds go to Seneca Santa</b> for Schuyler County kids. Brought to you by <b>South East Seneca</b>.</p>
+  <section class="how" aria-labelledby="how-h">
+    <div>
+      <h2 id="how-h">How to Send Santa</h2>
+      <ol class="steps">
+        <li>Take a video or picture with Santa</li>
+        <li>Post it on social media tagging @southeastseneca and Seneca Santa</li>
+        <li>Fill out this page and tap Send Santa</li>
+        <li>Share it and challenge your followers to donate too</li>
+      </ol>
+    </div>
+    <aside class="optout">
+      <h3>Not able to participate?</h3>
+      <p>No worries, Santa will be picked up free of charge.</p>
+      <button type="button" class="ghost" id="optout-open">Opt out here</button>
+      <form id="optout-form" hidden novalidate>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="field"><label for="oo-biz">Your business</label><select id="oo-biz" required></select>
+            <input type="text" id="oo-biz-other" placeholder="Type your business name" hidden></div>
+          <div class="field"><label for="oo-name">Your name</label><input type="text" id="oo-name" required></div>
+          <div class="field"><label for="oo-phone">Best number for pickup (optional)</label><input type="tel" id="oo-phone" inputmode="tel"></div>
+          <div class="field"><label for="oo-email">Email (optional)</label><input type="email" id="oo-email" inputmode="email" autocomplete="email"></div>
+          <button type="submit" class="ghost" id="oo-send">Pick up Santa</button>
+          <p id="oo-msg" style="text-transform:none" hidden></p>
+        </div>
+      </form>
+    </aside>
+  </section>
+
+  <p class="foot"><b>100% of proceeds go to Seneca Santa</b> for local kids. Brought to you by <b>South East Seneca</b>.</p>
 </main>
 
 <script>
 /* =================== EDIT THESE TWO LINES =================== */
-const STRIPE_LINK    = "https://buy.stripe.com/dRm5kw9MK2H06b08qI7kc00";
-const BUSINESS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKLCWHl2MmmGTY6Vkk8c4g0IWkeHbTmQUIFcuP2WXt4YKqOZqsmsqN4v2kzoqbXAmPDw/exec"; // Pass the Claus sheet (for the red bar)
-const COMMUNITY_SCRIPT_URL = ""; // Community Donations sheet /exec URL (saves gifts + green bar)
-const APPS_SCRIPT_URL = COMMUNITY_SCRIPT_URL;
+const STRIPE_LINK    = "https://buy.stripe.com/dRm5kw9MK2H06b08qI7kc00";  // your Stripe "customer chooses what to pay" link, e.g. https://buy.stripe.com/abc123
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKLCWHl2MmmGTY6Vkk8c4g0IWkeHbTmQUIFcuP2WXt4YKqOZqsmsqN4v2kzoqbXAmPDw/exec"; // Pass the Claus sheet
+const BUSINESS_SCRIPT_URL = APPS_SCRIPT_URL;
+const COMMUNITY_SCRIPT_URL = ""; // Community Donations sheet /exec URL (for the green bar)
 /* ============================================================ */
 
+const BUSINESSES = {
+  "South East Seneca": ["1885 Fruit Packing House","Atwater Vineyards","Burdett House Bed & Breakfast","Chateau Lafayette Reneau","Damiani Wine Cellars","Diamond on Seneca","Either Oar Wine, Whiskey & Cheese Bar","Finger Lakes Distilling","Grist Iron Brewing","Hazlitt 1852 Vineyards","Hector Cork and Bottle","Hector Hideaway Vineyard Villas","here.","HRLMS Creations Apothecary of Magic","Idol Ridge Winery & Alder Creek Distillery","J.R. Dill Winery","Johnny's Kitchen","Leidenfrost Vineyards","Lucky Hare Brewing (Hector)","Osmote Wine","Overlook Coffee Company","Rasta Ranch Vineyards","Red Newt Cellars","Ria's Wines","Ryan William Vineyard","Salvage on Seneca","Sawmill Creek Estate / Hector Wine Company","Scale House Brewery","Silver Thread Vineyard & Winegarden","Solera Tap House","Stonecat Café","The Burdett Exchange Meat and Mercantile","The Elf in the Oak","Two Goats Brewing","Vacation FLX","Wagner Vineyards"],
+  "Watkins Glen & Montour Falls": ["29 NEAT / Seneca Cheese Co.","Althea's Finger Lakes Tavern (Montour Falls)","Art & Nancy's Sub & Pizza Shop","Big Gully Candy","Bleachers Sports Bar & Grill","Blue Pointe Grille (Harbor Hotel)","Blue Ribbon Diner (Montour Falls)","Central Sip","Chef's Diner (Montour Falls)","Country Haven Treasures","El Rancho Mexican Restaurant","FLX Studio and Makers Market (Montour Falls)","Franklin Street Gallery & Gift Shop","Green Elephants Thai Vegan","H.L. Stevens Furniture (Montour Falls)","Harborside Lanes","Holy Cow Meat Market & Deli","House of Hong","International Motor Racing Research Center","Ivy Lane Flowers","J.R. Dill Wine Bar (Watkins Glen)","Jerlando's Ristorante & Pizza (Watkins Glen)","Jerlando's (Montour Falls)","Kookalaroc's Bar & Grill","Landon's Pub & Pizza","Lucky Hare Bar & Grill (Watkins Glen)","Lucky Star","Maria's Tavern","MicroDiner","Nickel's Pit BBQ","North New York at Montour House (Montour Falls)","Schuyler County Historical Society (Montour Falls)","Scuteri's Cannoli Connection","Seneca Sunrise Coffee","Singing Dog Bakery","Thai Elephants","The Benjamin Hotel","The Blackberry Inn","The Hotel Laurel at Seneca","The Tasting Room by Atwater (Watkins Glen)","Tobey's Donut Shop","Upstate Brewing Company FLX","Wags to Riches Thrift Shop","Watkins Glen Area Chamber / Visitor Center","Watkins Glen Harbor Hotel","Watkins Glen Promotions","Watkins Glen Wine & Spirits"],
+  "Around Schuyler County": ["2 Cats Cakery (Odessa)","Barry Family Cellars (Burdett)","Bub's Spirits (Odessa)","Bucket Bar & Grill (Odessa)","Castel Grisch Winery & Restaurant","Catharine Valley Winery","Curly's Family Restaurant","Hector Handmade","Lakeside Resort & 3812 Bistro","Lakewood Vineyards","Lost & Found Inn (Tyrone)","Odessa Coffee Depot","Quintus Gallery","Rasa Hot Chicken","Standing Stone Vineyards","Sugar Mountain Bakery","The Boar's Nest 414","The H&E Bar (Burdett)","TJ Antiques","Toni's Diner"]
+};
+const OTHER = "Other (type it in)";
 const LEVELS = {25:"Pass the Claus",50:"Fill the Stocking",75:"Santa's Helper",100:"Give the Gift of Christmas"};
+const IDEAS = ["We were good this year. Your turn.","Ho ho hope you have deep pockets!","Santa says you're on the nice list. Prove it.","He ate all our cookies. Good luck.","Pass the Claus, we dare you.","Don't let him near the wine, trust us."];
+
 const $ = id => document.getElementById(id);
 
+function fillSelect(sel, placeholder){
+  sel.innerHTML = "";
+  sel.append(new Option(placeholder, ""));
+  for (const [group, names] of Object.entries(BUSINESSES)){
+    const og = document.createElement("optgroup"); og.label = group;
+    names.forEach(n => og.append(new Option(n, n)));
+    sel.append(og);
+  }
+  sel.append(new Option(OTHER, OTHER));
+}
+function wireOther(sel, other){
+  sel.addEventListener("change", () => { other.hidden = sel.value !== OTHER; if (!other.hidden) other.focus(); });
+}
+const pickName = (sel, other) => sel.value === OTHER ? other.value.trim() : sel.value;
+
+fillSelect($("holder"), "Pick your business");
+fillSelect($("next"), "Pick where Santa goes");
+fillSelect($("oo-biz"), "Pick your business");
+wireOther($("holder"), $("holder-other"));
+wireOther($("next"), $("next-other"));
+wireOther($("oo-biz"), $("oo-biz-other"));
+
+// Message ideas
+IDEAS.forEach(t => {
+  const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = t;
+  b.addEventListener("click", () => { $("message").value = t; updateCount(); });
+  $("chips").append(b);
+});
+function updateCount(){ $("count").textContent = $("message").value.length + " / 250"; }
+$("message").addEventListener("input", updateCount);
+
+// Amount + button label
 function currentAmount(){
   const lv = document.querySelector('input[name="level"]:checked').value;
-  return lv !== "custom" ? Number(lv) : Math.round(Number($("amount").value) || 0);
+  if (lv !== "custom") return Number(lv);
+  return Math.round(Number($("amount").value) || 0);
 }
-function updateButton(){ const a = currentAmount(); $("send").textContent = a ? `Donate · $${a}` : "Donate"; }
+function updateButton(){
+  const a = currentAmount();
+  $("send").textContent = a ? `Send Santa · $${a}` : "Send Santa";
+}
 document.querySelectorAll('input[name="level"]').forEach(r => r.addEventListener("change", () => {
   if (r.value === "custom" && r.checked) $("amount").focus();
   updateButton();
@@ -298,7 +383,7 @@ $("amount").addEventListener("input", updateButton);
 
 function makeId(){
   const d = new Date(), p = n => String(n).padStart(2,"0");
-  return `SSD-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${Math.random().toString(36).slice(2,7).toUpperCase()}`;
+  return `SS-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${Math.random().toString(36).slice(2,7).toUpperCase()}`;
 }
 async function saveToSheet(data){
   if (!APPS_SCRIPT_URL) return;
@@ -310,18 +395,29 @@ async function saveToSheet(data){
 function go(url){ try { window.top.location.href = url; } catch (e) { window.location.href = url; } }
 function showErr(msg){ $("err").textContent = msg; $("err").hidden = !msg; }
 
-$("give-form").addEventListener("submit", async ev => {
+$("santa-form").addEventListener("submit", async ev => {
   ev.preventDefault();
   const amount = currentAmount();
-  const email = $("email").value.trim();
+  const holder = pickName($("holder"), $("holder-other"));
+  const next = pickName($("next"), $("next-other"));
   if (!amount || amount < 5) return showErr("Pick a level, or type an amount of $5 or more.");
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showErr("Add your email so we can send your receipt.");
+  if (!holder) return showErr("Tell us which business has Santa right now.");
+  if (!next) return showErr("Pick where Santa goes next.");
+  const email = $("email").value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showErr("Add your email so we can reach you if there's an issue.");
+  if (holder === next) return showErr("Santa can't stay put! Pick a different business for his next stop.");
   showErr("");
   const id = makeId();
-  $("send").disabled = true; $("send").textContent = "Wrapping it up…";
-  await saveToSheet({ type:"public", id, amount, level: LEVELS[amount] || "Custom",
-    from: $("name").value.trim(), email, message: $("note").value.trim(), anon: $("anon").checked ? "yes" : "no" });
-  try { localStorage.setItem("ss_return", "donate"); } catch (e) {}
+  const data = { type:"donation", id, amount, level: LEVELS[amount] || "Custom", holder, next,
+    message: $("message").value.trim(), from: $("from").value.trim(),
+    email, phone: $("phone").value.trim() };
+  $("send").disabled = true; $("send").textContent = "Packing Santa's sleigh…";
+  await saveToSheet(data);
+  if (!STRIPE_LINK){
+    $("send").disabled = false; updateButton();
+    return showErr(`Preview mode: no Stripe link yet. This would charge $${amount} and send Santa from ${holder} to ${next}.`);
+  }
+  try { localStorage.setItem("ss_return", "santa"); } catch (e) {}
   const url = new URL(STRIPE_LINK);
   url.searchParams.set("prefilled_amount", String(amount * 100));
   url.searchParams.set("client_reference_id", id);
@@ -329,10 +425,28 @@ $("give-form").addEventListener("submit", async ev => {
   go(url.toString());
 });
 
-function checkThanks(){ $("thanks").hidden = location.hash !== "#thanks"; if (!$("thanks").hidden) $("thanks").scrollIntoView(); }
-window.addEventListener("hashchange", checkThanks); checkThanks();
-updateButton();
+// Opt out
+$("optout-open").addEventListener("click", () => { $("optout-form").hidden = false; $("optout-open").hidden = true; $("oo-biz").focus(); });
+$("optout-form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const biz = pickName($("oo-biz"), $("oo-biz-other")), name = $("oo-name").value.trim();
+  const msg = $("oo-msg"); msg.hidden = false;
+  if (!biz || !name){ msg.textContent = "Please add your business and your name."; return; }
+  $("oo-send").disabled = true;
+  await saveToSheet({ type:"optout", id: makeId(), holder: biz, from: name, phone: $("oo-phone").value.trim(), email: $("oo-email").value.trim() });
+  $("optout-form").querySelectorAll(".field,#oo-send").forEach(el => el.hidden = true);
+  msg.textContent = APPS_SCRIPT_URL ? "Got it! Santa will be picked up soon. Thanks for playing along!" : "Preview mode: this would let us know to pick up Santa.";
+});
 
+// Thank-you view when Stripe sends people back to #thanks
+function checkThanks(){
+  if (location.hash === "#thanks"){ let r = null; try { r = localStorage.getItem("ss_return"); localStorage.removeItem("ss_return"); } catch (e) {}
+    if (r === "donate"){ location.replace("donate.html#thanks"); return; } }
+  $("thanks").hidden = location.hash !== "#thanks"; if (!$("thanks").hidden) $("thanks").scrollIntoView(); }
+window.addEventListener("hashchange", checkThanks); checkThanks();
+updateButton(); updateCount();
+
+// When embedded on Squarespace, tell the parent page how tall we are (no double scrollbars)
 function postHeight(){ try { parent.postMessage({ ssHeight: Math.ceil(document.body.getBoundingClientRect().height) }, "*"); } catch (e) {} }
 if (window.parent !== window){
   window.addEventListener("load", postHeight);
