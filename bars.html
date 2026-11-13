@@ -179,16 +179,16 @@ h1,.how h2,.thanks h2{letter-spacing:0}
     <div class="goal business">
       <img src="santa-small.png" alt="">
       <h3>Businesses passing the Claus</h3>
-      <p class="raised"><b id="biz-raised">$0</b> raised</p>
+      <p class="raised"><b id="biz-raised">&hellip;</b> raised</p>
       <div class="track" role="progressbar" aria-label="Business donations toward goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="biz-track"><div class="fill" id="biz-fill"></div></div>
-      <p class="meta"><span id="biz-gifts">0 donations</span><span id="biz-goal">Goal $10,000</span></p>
+      <p class="meta"><span id="biz-gifts">Counting&hellip;</span><span id="biz-goal">Goal $10,000</span></p>
     </div>
     <div class="goal community">
       <img src="tree.png" alt="">
       <h3>Community cheer</h3>
-      <p class="raised"><b id="pub-raised">$0</b> raised</p>
+      <p class="raised"><b id="pub-raised">&hellip;</b> raised</p>
       <div class="track" role="progressbar" aria-label="Community donations toward goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pub-track"><div class="fill" id="pub-fill"></div></div>
-      <p class="meta"><span id="pub-gifts">0 donors</span><span id="pub-goal">Goal $10,000</span></p>
+      <p class="meta"><span id="pub-gifts">Counting&hellip;</span><span id="pub-goal">Goal $10,000</span></p>
     </div>
   </section>
 </main>
@@ -204,7 +204,7 @@ const COMMUNITY_SCRIPT_URL = ""; // Community Donations sheet /exec URL
     document.getElementById(key + "-goal").textContent = "Goal " + money(goal);
     document.getElementById(key + "-gifts").textContent = gifts + " " + noun + (gifts === 1 ? "" : "s");
     document.getElementById(key + "-track").setAttribute("aria-valuenow", Math.round(pct));
-    requestAnimationFrame(() => { document.getElementById(key + "-fill").style.width = Math.max(pct, raised ? 3 : 0) + "%"; });
+    setTimeout(() => { document.getElementById(key + "-fill").style.width = Math.max(pct, raised ? 3 : 0) + "%"; }, 60);
   }
   async function load(){
     if (typeof BUSINESS_SCRIPT_URL !== "undefined" && BUSINESS_SCRIPT_URL) {
@@ -226,3 +226,4 @@ if (window.parent !== window){ window.addEventListener("load", postHeight); wind
 </script>
 </body>
 </html>
+
